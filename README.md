@@ -1,15 +1,16 @@
 # APK Factory
 
-AI驱动的APK自动构建工厂。只需描述需求，自动生成Flutter代码并编译APK。
+AI驱动的APK自动构建工厂。
 
-## 使用方式
-直接告诉AI你的需求，AI会自动生成代码、触发构建、返回APK下载链接。
+## 工作流
+1. 告诉我你的APP需求
+2. AI生成Flutter代码并推送到此仓库
+3. GitHub Actions自动编译APK
+4. 返回APK下载链接
 
 ## 项目结构
-```
 apps/
-  app-001/   # 第一个APP
-  app-002/   # 第二个APP
-  ...
-```
+  app-001/
+  app-002/
 
+仓库已就绪，等待第一个APP需求。
