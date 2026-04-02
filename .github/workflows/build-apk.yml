@@ -1,0 +1,39 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: APP目录名（如 my-app-001）
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: flutter-action@v2
+        with:
+          flutter-version: 3.27.0
+          channel: stable
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Enable Android SDK
+        run: |
+          flutter config --no-analytics
+          flutter doctor --android-licenses 2>/dev/null || true
+      - name: Build debug APK
+        run: |
+          cd apps/${{ github.event.inputs.app_name }}
+          flutter pub get
+          flutter build apk --debug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.app_name }}-apk
+          path: apps/${{ github.event.inputs.app_name }}/build/app/outputs/flutter-apk/*.apk
+          retention-days: 7
