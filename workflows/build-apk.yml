@@ -1,0 +1,65 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      app_name:
+        description: 'APP名称（如 my-app-001）'
+        required: true
+        type: string
+      app_description:
+        description: 'APP功能描述'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Flutter
+        uses: flutter-action@v2
+        with:
+          flutter-version: '3.27.0'
+          channel: 'stable'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Enable Android SDK
+        run: |
+          flutter config --no-analytics
+          flutter doctor --android-licenses 2>/dev/null || true
+
+      - name: Get dependencies
+        run: |
+          cd apps/${{ github.event.inputs.app_name }}
+          flutter pub get
+
+      - name: Build debug APK
+        run: |
+          cd apps/${{ github.event.inputs.app_name }}
+          flutter build apk --debug -v
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.inputs.app_name }}-apk
+          path: apps/${{ github.event.inputs.app_name }}/build/app/outputs/flutter-apk/*.apk
+          retention-days: 7
+
+      - name: Get download URL
+        id: download
+        run: |
+          URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Build log: $URL"
+          echo "APK artifact available in the Artifacts section above"
