@@ -26,14 +26,16 @@ jobs:
         run: |
           flutter config --no-analytics
           yes | flutter doctor --android-licenses || true
-      - name: Generate Flutter project structure
-        run: 
+           - name: Generate Flutter project structure
+        run: |
+          cd apps/${{ github.event.inputs.app_name }}
+          flutter create . --platforms=android
+
       - name: Build debug APK
         run: |
-    cd apps/hello-world
-    flutter create . --platforms=android
-    flutter pub get
-    flutter build apk --debug
+          cd apps/${{ github.event.inputs.app_name }}
+          flutter pub get
+          flutter build apk --debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
