@@ -26,10 +26,12 @@ jobs:
         run: |
           flutter config --no-analytics
           yes | flutter doctor --android-licenses || true
-           - name: Generate Flutter project structure
+
+      - name: Generate Flutter project structure
         run: |
           cd apps/${{ github.event.inputs.app_name }}
           flutter create . --platforms=android
+
 
       - name: Build debug APK
         run: |
