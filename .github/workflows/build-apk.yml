@@ -25,7 +25,7 @@ jobs:
       - name: Enable Android SDK
         run: |
           flutter config --no-analytics
-          flutter doctor --android-licenses 2>/dev/null || true
+          yes | flutter doctor --android-licenses || true
       - name: Build debug APK
         run: |
           cd apps/${{ github.event.inputs.app_name }}
