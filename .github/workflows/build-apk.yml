@@ -29,10 +29,11 @@ jobs:
       - name: Generate Flutter project structure
         run: 
       - name: Build debug APK
-        run: cd apps/hello-world && flutter create . --platforms=android
-          cd apps/${{ github.event.inputs.app_name }}
-          flutter pub get
-          flutter build apk --debug
+        run: |
+    cd apps/hello-world
+    flutter create . --platforms=android
+    flutter pub get
+    flutter build apk --debug
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
