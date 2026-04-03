@@ -1,4 +1,4 @@
-name: hello-world
+name: hello_world
 description: Hello World 示例 APP
 publish_to: 'none'
 version: 1.0.0+1
